@@ -1,0 +1,70 @@
+[gd_scene load_steps=7 format=3 uid="uid://cmqla5pcnqyip"]
+
+[ext_resource type="Script" path="res://Player.gd" id="1_46eki"]
+[ext_resource type="Texture2D" uid="uid://ci5h4ui45ovxs" path="res://Player.png" id="2_u4wfg"]
+[ext_resource type="PackedScene" uid="uid://pxy7gr3iyr7e" path="res://Walls.tscn" id="3_rndks"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_724hi"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_213qe"]
+size = Vector2(18, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1p567"]
+size = Vector2(20, 384)
+
+[node name="World" type="Node2D"]
+
+[node name="PlayerNode" type="Node2D" parent="."]
+
+[node name="Player" type="CharacterBody2D" parent="PlayerNode"]
+script = ExtResource("1_46eki")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerNode/Player"]
+shape = SubResource("RectangleShape2D_724hi")
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerNode/Player"]
+texture = ExtResource("2_u4wfg")
+
+[node name="Detect" type="Area2D" parent="PlayerNode/Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerNode/Player/Detect"]
+shape = SubResource("RectangleShape2D_213qe")
+
+[node name="Resetter" type="Area2D" parent="PlayerNode/Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerNode/Player/Resetter"]
+position = Vector2(-440, 0)
+shape = SubResource("RectangleShape2D_1p567")
+
+[node name="Wall" parent="." instance=ExtResource("3_rndks")]
+position = Vector2(296, 16)
+
+[node name="Wall2" parent="." instance=ExtResource("3_rndks")]
+position = Vector2(408, 40)
+
+[node name="Wall3" parent="." instance=ExtResource("3_rndks")]
+position = Vector2(520, 56)
+
+[node name="Wall4" parent="." instance=ExtResource("3_rndks")]
+position = Vector2(624, 24)
+
+[node name="Wall5" parent="." instance=ExtResource("3_rndks")]
+position = Vector2(728, 32)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.5, 1.5)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer"]
+offset_left = -8.0
+offset_top = -208.0
+offset_right = 32.0
+offset_bottom = -168.0
+text = "0"
+
+[connection signal="area_entered" from="PlayerNode/Player/Detect" to="PlayerNode/Player" method="_on_detect_area_entered"]
+[connection signal="body_entered" from="PlayerNode/Player/Detect" to="PlayerNode/Player" method="_on_detect_body_entered"]
+[connection signal="body_entered" from="PlayerNode/Player/Resetter" to="PlayerNode/Player" method="_on_resetter_body_entered"]
